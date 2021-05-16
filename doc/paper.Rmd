@@ -1,0 +1,229 @@
+---
+title: |
+  | Assignment 2 - Build on theory: Unraveling theory \vspace{1cm}
+
+author: |
+  | Rebecca Koprik
+  | Research on Corporate Transparency
+  | TRR 266 "Accounting for Transparency"
+  | Humboldt-Universität zu Berlin 
+
+date: |
+  | `r loc <- Sys.getlocale(category = "LC_TIME"); Sys.setlocale("LC_TIME", "C"); fdate <- format(Sys.time(), '%B %e, %Y'); Sys.setlocale("LC_TIME", loc); fdate` \vspace{1cm}
+  
+abstract: |
+  | This is a handout for the lecture on Unravaling Theory. 
+  | \vspace{8cm}
+
+bibliography: references.bib
+biblio-style: apsr
+
+output:
+  pdf_document: 
+    number_sections: true
+  toc: no
+fig_caption: yes
+fontsize: 11pt
+ident: yes
+
+always_allow_html: yes
+
+header-includes:
+  - \usepackage[nolists]{endfloat}    
+  - \usepackage{setspace}\doublespacing
+  - \setlength{\parindent}{4em}
+  - \setlength{\parskip}{0em}
+  - \usepackage[hang,flushmargin]{footmisc}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=24pt,font=bf}
+  - \usepackage{array}
+  - \usepackage{threeparttable}
+  - \usepackage{adjustbox}
+  - \usepackage{graphicx}
+  - \usepackage{csquotes}
+  - \usepackage{booktabs} 
+  - \usepackage{animate}
+---
+
+---
+nocite: '@*'
+---
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(stringr)
+library(knitr)
+library(kableExtra)
+opts_chunk$set(fig.pos = 'p') # Places figures on their own pages
+opts_chunk$set(out.width = '100%', dpi=300)
+opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE)
+
+load("../data/generated/sample.rda")
+load("../output/results.rda")
+```
+
+\pagebreak
+
+# Intuition
+
+"Weather insiders (e.g., managers, sellers) fully disclose their private information has been a research interest in accounting as well as in finance and economics" (@JAR1988). The motivation in this is to understand what are the incentives and expected behaviour of the agents in this (un)certain information environment. 
+
+Do firms voluntarily disclose private information (e.g., about earnings, production, future demand, etc.)?
+
+  Firms indeed voluntarily disclose private information. They do so to try to avoid adverse selection. Adverse selection can refer to a situation where sellers have more information than buyers (or vice versa) about some aspect of product quality, or any other private information. Typically the more knowledgeable party is the seller. Adverse selection occurs when asymmetric information is exploited. For example, a firm that doesn't disclose results has better information about the company value than other market participants and might try to exploit this fact. However, investors are usually not willing to give money for something they are not fully informed about. By keeping the information private, the firm will end up with less capital invested - investors will discount for unsure information. Hence, firms do have an incentive to disclose and will voluntarily do so. 
+  
+# Model with certain information endowment
+
+  This model is based on @JLE1981 and @BJE1981. Let's assume a set of $i$ firms with a value $x$ represented by
+  \begin{equation}
+    x_i = y_i + \epsilon_i
+  \end{equation} 
+  where $x_i$ represents the firm value
+        $y_i$ represents the observable information
+        $\epsilon_i$ represents the error term
+        
+  Information is observed by each firm and has a probability density function of common knowledge and error is a generally unkown noise with $E[\epsilon]=0$. 
+  Investors have rational expectations and based on the information they receive, they will price the firm:
+  \begin{equation}
+  P(y) = E[x|y] = y
+  \end{equation}
+  
+  The only equilibrium in this game will be: firms disclose all the information, investors price the firm at $P = y$ upon disclosure and at $P = E[y]$ upon nondisclosure.
+  
+\begin{center}
+  Figure 1 \\
+  \animategraphics[loop,controls,width=0.8\textwidth,height=0.5\textwidth,scale=1.3,buttonsize=0.05\textwidth]{0.5}{../media/fig}{0}{10} \\
+  Source: Gassen (2021), based on Grossman (1981) and Milgrom (1981)
+\end{center}
+    
+  In Figure 1, we can see how the unraveling occurs. Initially, the 10 firms are uniformly distributed and no one discloses information. Upon nondisclosure (red dots), the market prices the firms based on the expectation of y - uniformly distributed from 1-10. Hence, $P = E[y] = (1+2+…+10)/10 = 5.5$. The firms that are after the 45' line (that have information that would place them above the price of 5.5) will have a strong incentive to disclose. They will annouce the disclosure (their representation turns blue) and then disclose. The market will adjust their price based on the information, since every information is trustworthy. As the first time, upon nondisclosure, the market will price the firms based on the expectation of y - now, uniformly distributed from 1-5. Hence, $P = E[y] = (1+2+…+5)/5 = 3$. The price of nondisclosing firms goes down from 5.5 to 3. The firms after the 45'line will again have a strong incentive to disclose, as they have the information that would place them with a higher price than 3. They update their disclosure decision and disclose information, being priced correctly at the same. The same initial readjustment of prices of nondisclosing firms will occur, they will be priced at the expectation of y - now, uniformly distributed from 1-2, $P = E[y] = (1+2)/2 = 1.5$. Price of nondisclosing firms goes down from 3 to 1.5. The firms that are undervalued at such price will disclose. The market will again adjust the price of the nondisclosing firms based on the expectation of y. This mechanism will occur until every firm discloses. The last firm would technically be indeferent on the disclosure, but the model assumes that upon indiference, firms disclose. Hence, we have the unique possible equilibrium - every firm voluntarily discloses information.
+  
+  
+# Model with uncertain information endowment 
+
+  The first model assumes that managers have a complete and perfect information on the company. However, it is quite strong to assume that every firm actually has the information to disclose. Is it even realistic to think that a manager wouldn’t have the information on the company?
+  There are several possibilities where information is not known. First one would be unpredictable cases (e.g., Covid-19). Such unpredictable events lead to an unexpected shock in future demand that affects all firms, with no possibility of forecast. 
+  A second possibility would be outside factors - substitute/complementary goods can be released at any time by another firm (affecting future demand, e.g.). 
+  Last but not least, different business models (BM) also lead to lack of information. Firms with traditional BM’s know their demand, can compare/estimate based on peers, etc. Innovative BM’s that work with new products don’t really know their future demand – they are trying something new and won’t disclose because than it wouldn’t be new anymore.
+  There are several other cases when information is not know, these are just some examples.
+  What happens when the manager doesn’t have the information? Would unraveling still occur?
+  
+  \newpage
+
+\begin{center}
+  Figure 2 \\
+  \animategraphics[loop,controls,width=0.8\textwidth,height=0.5\textwidth,scale=1.3,buttonsize=0.05\textwidth]{0.5}{../media/fig}{11}{17} \\
+  Source: Gassen (2021), based on Dye (1985) and Jung and Kwon (1988)
+\end{center}
+  
+  Figure 2 show the unraveling model where some firms don't have information (green dots). The idea is very similar, but the result won't be the same. Starting with 10 uniformly distributed nondisclosing firms, market prices them based on the expectation of y $P = E[y] = (1+2+…+10)/10 = 5.5$. Again, firms underpriced at $P = 5.5$ will update their disclosure decisions and disclose information. The firms that disclosed will have their prices adjusted upwards and correctly, since every disclosure is trustworthy. The market will again adjust the firms that didn't disclose according to the expectation of y. However, the market only observes red and blue - any nondisclosure act is taken as red, since the market cannot observe the reason. Hence, all of the red and green will be adjusted by the expectation of y, that is, $P = E[y] = (1+2+3+4+10)/5 = 4$. Firms undervalued at the new price of 4 will disclose, market will again correct their prices, etc. This mechanism will continue until all the firms that had incentice/possibility to disclose, did so.  
+
+
+# Real Life Example
+
+One of the most innovative companies of the current scenario is a perfect example for the uncertain information endowment - Tesla.
+
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{../media/tesla.png}
+\end{center} 
+
+  Figure 3 shows a short timeline of Tesla and its main events. This is to put some of the following comments into context.
+  
+\begin{center}
+  Figure 3 \\
+  \includegraphics[width=1.1\textwidth]{../media/tesla1.png} \\
+  Tesla timeline. Source: Prepared by the author based on Tesla and Forbes
+\end{center} 
+
+Model 3 was one of the biggest bets they had. It ended up being the best selling plug-in car of all times. Here are some events concerning the model:
+
+- $(2006)$ First mention of Model 3 as an affordable for all car
+- $(2007)$ Model 3 was codenamed Tesla "BlueStar" in the original business plan of 2007
+- $(Jul 2014)$ Model 3 announced on Musk’s Twitter account
+- $(Mar 2016)$ Costumers able to reserve a Model 3
+- $(Jul 2017)$ Delays in deliveries – extension until 2018
+- $(Nov 2020)$ Refreshed with cosmetic and internal changes
+- $(Dec 2020)$ Global sales since inception totaled about 814,000 units – best selling plug-in electric car ever
+
+Its sucessor, Model Y, also caused a lot of repercursion and has been around for quite some time already. 
+
+- $(2013)$ Trademark filed 
+- $(2015)$ Possible design as a Model 3-based Model Y with falcon-wing doors
+- $(Jun 2017)$ Model Y's silhouette presented at the annual general meeting 
+- $(Jun 2018)$ New silhouette revealed by CEO Musk
+- $(Mar 2019)$ Debut of Model Y at Tesla's design studio in Hawthorne, CA
+- $(Nov 2019)$ Announcement that Model Y would be assembled in Berlin’s Gigafactory
+- $(Jan 2020)$ Announcement that delivery of Model Y should begin in Q1 2020
+- $(Mar 2020)$ First deliveries 
+- $(Aug 2020)$ Design and manufacturing still improving – world’s largest unibody casting machine, switching to casting the rear body in a single piece
+- $(Jan 2021)$ Improvement of optional 7-seat, third-row seating configuration
+
+
+Based on the models we just saw, we should expect that those early annoucements would bring the stock price up. However, let's take a closer look.
+
+\newpage
+
+\begin{center}
+  Figure 4 \\
+  \includegraphics[width=1.1\textwidth]{../media/tesla_model_3.png} \\
+  Timeline Model 3 vs. Stock price. \\
+  Source: Prepared by the author based on Forbes and Tesla (as of 05/14/2021)
+\end{center}
+      
+Figure 4 shows us the stock price evolution and the main events concerning Model 3 are pointed in the timeline. Why all of those announcements didn't affect the stock price? Were future demand ever announced? They are selling Model 3 since 2016. 
+
+\newpage
+
+\begin{center}
+  Figure 5 \\
+  \includegraphics[width=1.1\textwidth]{../media/tesla_model_y.png} \\
+  Timeline Model Y vs. Stock price. \\
+  Source: Prepared by the author based on Forbes and Tesla (as of 05/14/2021)
+\end{center}
+
+Figure 5 show us the same but for Model Y. The same concerns are raised. If it is such a great thing and great sales potential, why hasn't the stock price gone up? With all those announcements and media attention, why hasn’t Tesla’s stock price gone up before 2020?
+
+Well, innovation is...new! It is hard to forecast the impact of innovation. Just as it is hard to predict future demand of something that was newly created. Firms themselves can’t know the impact and financial forecast when developing new technologies. How do you put a price on something that was never done before? This information is unknown by the manager…and also by everyone else!
+In this case, the new technology is proving itself profitable after several years when mass production is starting.
+
+\newpage
+
+\begin{center}
+  Figure 6 \\
+  \includegraphics[width=1\textwidth]{../media/tesla_future_demand.png} \\
+  Source: Forbes
+\end{center}
+
+We already have some evidence that now that the innovation is around for a while, then it can be priced and its impacts forecasted. In this case, unraveling will occur normally. Signaling increased future demand by raising price will leade to a stock price adjustment - market will price Tesla accordingly upwards.
+
+This is a clear example where a innovative business model/product, will lead to a lack of information. Simply beacuse it's new, and everything that is new, is usually unknown.
+
+Another example to make this explicit, yet extreme, would be SpaceX.Ready for a SpaceX IPO? Company denied any intent to do so, but let’s assume it would. Morgan Stanley’s Adam Jonas VERY PRECISE valuation on SpaceX is…
+
+“For this report, we built a hypothetical DCF range for SpaceX, valuing the company somewhere between ~$5 bn and $120 bn+, with a Base Case of ~$50 bn.”
+
+\begin{center}
+  Figure 7 \\
+  \includegraphics[width=0.8\textwidth]{../media/spacex2.png} \\
+  SpaceX valuation. \\
+  Source: Financial Times
+\end{center}
+
+Part of this valuation depends on whether SpaceX actually does reinvent itself into a satellite-internet company, as Morgan Stanley predicts. (The $5bn figure is their ballparkvaluation if it doesn’t.). Mars missions don’t appear to factor into their model.
+
+What if it was? What is the value of landing on Mars? Do think anyone has this information?
+
+
+\pagebreak
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{\arabic{table}}
+
+
+
+# References {-}
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\noindent
